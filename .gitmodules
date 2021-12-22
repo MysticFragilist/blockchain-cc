@@ -1,0 +1,3 @@
+[submodule "md5.lua"]
+	path = md5.lua
+	url = git@github.com:kikito/md5.lua.git
