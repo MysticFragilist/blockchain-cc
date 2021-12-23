@@ -27,8 +27,8 @@ local mining = {
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   ]]
 }
-
-local blockchain = require 'blockchain'
+mining = {}
+local blockchain = blockchain or require 'lib/blockchain'
 
 -- in seconds
 mining.BLOCK_GENERATION_INTERVAL = 10

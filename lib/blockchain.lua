@@ -1,4 +1,4 @@
-blockchain = {
+local blockchain = {
   _VERSION     = "blockchain.lua 0.0.1",
   _DESCRIPTION = "Blockchain made in Lua (5.1-3, LuaJIT)",
   _URL         = "https://github.com/MysticFragilist/blockchain-cc",
@@ -27,9 +27,9 @@ blockchain = {
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   ]]
 }
-local md5 = require 'externals/md5'
-local networking = require 'networking'
-local mining = require 'mining'
+md5 = md5 or require 'lib/externals/md5'
+local networking = networking or require 'lib/networking'
+local mining = mining or require 'lib/mining'
 
 local blockchainInstance = {}
 local dir = "./data"

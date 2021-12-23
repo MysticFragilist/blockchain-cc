@@ -1,0 +1,8 @@
+{
+  "Lua.diagnostics.globals": [
+    "blockchain",
+    "networking",
+    "mining",
+    "md5"
+  ]
+}
