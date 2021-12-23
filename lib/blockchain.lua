@@ -27,9 +27,9 @@ blockchain = {
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   ]]
 }
-local md5 = require './externals/md5'
-local networking = require './networking'
-local mining = require './mining'
+local md5 = require 'externals/md5'
+local networking = require 'networking'
+local mining = require 'mining'
 
 local blockchainInstance = {}
 local dir = "./data"

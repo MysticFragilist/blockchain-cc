@@ -28,6 +28,8 @@ local networking = {
   ]]
 }
 
+local blockchain = require 'blockchain'
+
 -- We will use rednet API to send messages to the network
 -- Let's assume rednet modem will be placed on top of the computer
 local protocolName = "minecoin-1.0.0"

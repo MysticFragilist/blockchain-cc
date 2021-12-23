@@ -1,6 +1,6 @@
-local blockchain = require './lib/blockchain'
-local networking = require './lib/networking'
-local mining = require './lib/mining'
+local blockchain = require 'lib/blockchain'
+local networking = require 'lib/networking'
+local mining = require 'lib/mining'
 
 --------------------------------------------------------------------------------
 -- MAIN program
