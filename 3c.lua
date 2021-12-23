@@ -46,7 +46,7 @@ end
 if args[1] == "-r" or args[1] == "--run" then
   defineDirectory()
 
-  local bc = networking.fetchBlockchain()
+  local bc = networking.broadcastGetBlockchainRequest()
   if bc ~= nil then
     blockchain.setBlockchain(bc)
   end

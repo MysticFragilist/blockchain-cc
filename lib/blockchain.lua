@@ -60,7 +60,11 @@ function blockchain.getBlockchain()
 end
 
 function blockchain.getLength()
-  return table.getn(blockchainInstance)
+  return #blockchainInstance
+end
+
+function blockchain.getLatestBlock()
+  return blockchainInstance[blockchain.getLength()]
 end
 
 function blockchain.setBlockchain(blockchain)
@@ -78,14 +82,14 @@ function blockchain.loadBlockchainFromFile(blockchain)
   blockchainInstance = textUtils.unserialize(fileToStr)
 end
 
-local function addBlock (previousBlock, newBlock)
-  if blockchain.IsNewBlockValid(newBlock, previousBlock) then
+local function addBlock (newBlock)
+  if blockchain.IsNewBlockValid(newBlock, blockchain.getLatestBlock()) then
     blockchain.push(newBlock);
   end
 end
 
 function blockchain.generateNextBlock (blockData)
-  local previousBlock = blockchainInstance[blockchain.getLength()]
+  local previousBlock = blockchain.getLatestBlock()
   local nextIndex = previousBlock.index + 1
   local nextTimestamp = os.epoch("utc") / 1000
 
@@ -95,14 +99,14 @@ function blockchain.generateNextBlock (blockData)
   local nextHash = blockchain.calculateHash(newBlock)
   newBlock.hash = nextHash
 
-  addBlock(previousBlock, newBlock)
+  addBlock(newBlock)
   networking.broadcastLatest()
   return newBlock;
 end
 
 local function isValidTimestamp (newBlock, previousBlock)
   return previousBlock.timestamp - 60 < newBlock.timestamp and
-    newBlock.timestamp - 60 < blockchainInstance[blockchain.getLength()].timestamp
+    newBlock.timestamp - 60 < blockchain.getLatestBlock().timestamp
 end
 
 local function isValidBlockStructure (block)
@@ -174,7 +178,7 @@ function blockchain.ReplaceChain (newBlocks)
   if isChainValid(newBlocks) and newBlocks.length > blockchain.getBlockchain().length then
       print("Received blockchain is valid. Replacing current blockchain with received blockchain")
       blockchain.setBlockchain(newBlocks)
-      networking.broadcastLatest()
+      networking.broadcastBlockchain()
   else
       print("Received blockchain invalid")
   end

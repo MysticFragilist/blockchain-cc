@@ -41,6 +41,7 @@ local modemSide = "top"
 
 local getBlockchainRequest = { action = "REQ", command = "get-blockchain" }
 
+local getLatestBlockRequest = { action = "REQ", command = "get-latest-block" }
 
 local function open()
   if not rednet.isOpen(modemSide) then
@@ -54,6 +55,33 @@ local function close()
   end
 end
 
+local function handleGetBlockChainResponse(messageAsObj)
+  local blockchainReceived = textUtils.unserialize(messageAsObj.data)
+  if #blockchainReceived > 0 then
+    local latestBlockReceived = blockchainReceived[#blockchainReceived]
+    local latestBlockHeld = blockchain.getLatestBlock()
+    if latestBlockReceived.index > latestBlockHeld.index then
+      print("blockchain possibly behind. We got: " .. latestBlockHeld.index .. " peer has: " .. latestBlockReceived.index)
+      if latestBlockHeld.hash == latestBlockReceived.previousHash then
+        if blockchain.addBlockToChain(latestBlockReceived) then
+          networking.broadcastMessage(getLatestBlockRequest)
+        end
+      elseif #blockchainReceived == 1 then
+        print("We have to query the chain from our peer");
+        networking.broadcastGetBlockchainRequest()
+      else
+        print("Received blockchain is longer than current blockchain");
+        blockchain.replaceChain(blockchainReceived)
+      end
+    else
+      print("received blockchain is not longer than received blockchain. Do nothing");
+    end
+  else
+    print("No blockchain received")
+  end
+end
+
+-- MAIN LISTEN FUNCTION
 function networking.listen()
   open()
   while true do
@@ -63,17 +91,23 @@ function networking.listen()
       if messageAsObj.command == "get-blockchain" then
         local response = { action = "RES", command = "get-blockchain", data = textUtils.serialize(blockchain.getBlockchain()) }
         rednet.send(senderID, textUtils.serialize(response), protocolName)
+      elseif messageAsObj.command == "get-latest-block" then
+        local response = { action = "RES", command = "get-latest-block", data = textUtils.serialize(blockchain.getLatestBlock()) }
+        rednet.send(senderID, textUtils.serialize(response), protocolName)
       end
+    elseif messageAsObj.action == "RES" then
+      handleGetBlockChainResponse(messageAsObj)
     end
-    local _, key = os.pullEvent("key")
   end
   close()
 end
 
-function networking.fetchBlockchain()
+
+-- Broadcast a request to get the blockchain or the lastest block
+function networking.broadcastMessage(msgToBroadcastAsObj)
   open()
 
-  rednet.broadcast(textUtils.serialize(getBlockchainRequest), protocolName)
+  rednet.broadcast(textUtils.serialize(msgToBroadcastAsObj), protocolName)
   local senderID, message = rednet.receive(protocolName)
   local messageAsObj = textUtils.unserialize(message)
   if messageAsObj.action == "RES" and messageAsObj.command == "get-blockchain" then
@@ -82,16 +116,15 @@ function networking.fetchBlockchain()
   return nil
 end
 
-function networking.broadcastLatest()
+function networking.broadcastGetBlockchainRequest()
+  return networking.broadcastMessage(getBlockchainRequest)
+end
+
+-- Broadcast a response to all the peer after an update (making sure everyone is up to date)
+function networking.broadcastBlockchain()
   open()
   local res = { action = "RES", command = "get-blockchain", data = textUtils.serialize(blockchain.getBlockchain()) }
   rednet.broadcast(textUtils.serialize(res), protocolName)
-  local senderID, message = rednet.receive(protocolName)
-  local messageAsObj = textUtils.unserialize(message)
-  if messageAsObj.action == "RES" and messageAsObj.command == "get-blockchain" then
-    return textUtils.unserialize(messageAsObj.data)
-  end
-  return nil
 end
 
 
