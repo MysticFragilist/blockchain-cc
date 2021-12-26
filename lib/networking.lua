@@ -28,7 +28,7 @@ local networking = {
   ]]
 }
 networking = {}
-local blockchain = blockchain or require 'lib/blockchain'
+blockchain = blockchain or require 'lib/blockchain'
 
 -- We will use rednet API to send messages to the network
 -- Let's assume rednet modem will be placed on top of the computer

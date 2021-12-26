@@ -28,7 +28,7 @@ local mining = {
   ]]
 }
 mining = {}
-local blockchain = blockchain or require 'lib/blockchain'
+blockchain = blockchain or require 'lib/blockchain'
 
 -- in seconds
 mining.BLOCK_GENERATION_INTERVAL = 10

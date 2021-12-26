@@ -11,7 +11,6 @@ local function defineDirectory ()
   if not fs.exists(dir) then
     fs.makeDir(dir)
   end
-
 end
 
 local function wait_for_q()

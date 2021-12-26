@@ -28,8 +28,8 @@ local blockchain = {
   ]]
 }
 md5 = md5 or require 'lib/externals/md5'
-local networking = networking or require 'lib/networking'
-local mining = mining or require 'lib/mining'
+networking = networking or require 'lib/networking'
+mining = mining or require 'lib/mining'
 
 local blockchainInstance = {}
 local dir = "./data"
