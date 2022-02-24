@@ -4,7 +4,7 @@
 ### Introduction
 This is an old project that we talked among friends. We wanted to do it for such a long time for our server but never did fault of having no knowledge whatsoever in blockchain. As more and more tutorials are published with crypto being more mainstream, we decided to make a crypto currency just for fun in LUA targeted for computer craft (tweaked version).
 
-So here is our first version of 3C, and hope it will .
+So here is our first version of 3C, and hope it will be useful for you!
 
 ## Usage
 
