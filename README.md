@@ -29,6 +29,7 @@ Here are my pastebin links:
 ### Usage
 Usage: 3c \<param\>
   Possible parameter to use:
+  
     -i, --init: initialize the blockchain
     -f, --fetch \[host\]: connect to the network by passing through the known host, if none fetch
     -h, --help: show this help
