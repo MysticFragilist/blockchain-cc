@@ -25,7 +25,6 @@ Here are my pastebin links:
 | `<path>/3c/lib/networking.lua` | [https://pastebin.com/raw/jwXZjYjq](https://pastebin.com/raw/jwXZjYjq) | The networking module for 3C |
 | `<path>/3c/lib/blockchain.lua` | [https://pastebin.com/raw/jwXZjYjq](https://pastebin.com/raw/jwXZjYjq) | The blockchain module for 3C |
 
-
 ### Usage
 Usage: 3c \<param\>
   Possible parameter to use:
